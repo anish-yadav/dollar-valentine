@@ -42,6 +42,28 @@ const Text = {
       fontSize:"24px",
       textAlign:"center"
     },
+    header:{
+      fontWeight: "600",
+      color:"black",
+      fontSize:"22px"
+    },
+    body:{
+      color:"gray.500",
+      fontWeight:"500"
+    },
+    label :{ 
+      color:"gray.500",
+      fontWeight:600
+    },
+    bodyWhite:{
+      color:"gray.100"
+    },
+    hero:{
+      fontSize:"54px",
+      color:"white",
+      fontWeight:"600",
+      lineHeight: 1.2
+    }
   },
 };
 const theme = extendTheme({
@@ -83,6 +105,14 @@ const theme = extendTheme({
           padding:"10px 30px",
           margin:"auto 20px"
         },
+        submit:{
+          background:"primary.900",
+          color:"white",
+          width:"100%",
+          marginTop:"20px",
+          fontSize:"18px",
+          fontWeight: "400"
+        }
       },
     },
     Text,

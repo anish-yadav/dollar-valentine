@@ -40,18 +40,25 @@ export default function MyRadio(props: Props) {
 interface MyProp {
   handleChange: (s: string) => void;
   children: string;
-  isChecked: boolean
+  isChecked: boolean;
+  shadow? : string;
+  borderColor? : string
 }
-export const RadioCard = ({ isChecked, children, handleChange }: MyProp) => {
+export const RadioCard = ({ isChecked, children,shadow,borderColor, handleChange }: MyProp) => {
   return (
     <Box
       data-checked={isChecked ? "": undefined}
       onClick={() => handleChange(children)}
       cursor="pointer"
-      borderWidth="3px"
+      borderWidth="2px"
       borderRadius="md"
-      borderColor="white"
-      boxShadow="md"
+      px={9}
+      py={3}
+      marginTop={3}
+      marginBottom={3}
+      mx={2}
+      borderColor={borderColor ? borderColor: "white"}
+      boxShadow={shadow ? shadow : "md"}
       color="black"
       fontSize="18px"
       fontWeight="400"
@@ -62,10 +69,7 @@ export const RadioCard = ({ isChecked, children, handleChange }: MyProp) => {
       _focus={{
         boxShadow: "outline",
       }}
-      px={9}
-      py={3}
-      my={3}
-      mx={2}
+      
       minWidth="150px"
       textAlign="center"
     >
