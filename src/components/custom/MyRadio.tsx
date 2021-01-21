@@ -48,19 +48,26 @@ export const RadioCard = ({ isChecked, children, handleChange }: MyProp) => {
       data-checked={isChecked ? "": undefined}
       onClick={() => handleChange(children)}
       cursor="pointer"
-      borderWidth="1px"
+      borderWidth="3px"
       borderRadius="md"
+      borderColor="white"
       boxShadow="md"
+      color="black"
+      fontSize="18px"
+      fontWeight="400"
       _checked={{
-        bg: "teal.600",
-        color: "white",
-        borderColor: "teal.600",
+        bg: "primary.200",
+        borderColor: "primary.900"
       }}
       _focus={{
         boxShadow: "outline",
       }}
-      px={5}
+      px={9}
       py={3}
+      my={3}
+      mx={2}
+      minWidth="150px"
+      textAlign="center"
     >
       {children}
     </Box>

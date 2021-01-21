@@ -6,13 +6,10 @@ import {
   RadioGroup,
   Stack,
   Text,
-  useRadioGroup,
 } from "@chakra-ui/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { QuestionType } from "../../constants/questions";
-import MyRadio,{ RadioCard } from "../custom/MyRadio"
-
-
+import { RadioCard } from "../custom/MyRadio";
 
 interface Props extends InputProps {
   handleChange: (e: string | ChangeEvent<any>) => void;
@@ -57,45 +54,58 @@ interface Props2 {
   index: number;
   name: string;
   isLast: boolean;
-  currValue: string
+  currValue: string;
+  nextQuestion: () => void;
 }
-export const Question2 = ({ index, question, handleChange, name, currValue }: Props2) => {
-  const [_, setValue] = useState<string>(" ");
+export const Question2 = ({
+  index,
+  question,
+  handleChange,
+  currValue,
+  nextQuestion,
+}: Props2) => {
+  const [, setValue] = useState<string>(" ");
 
   const inputChanged = (s: string) => {
     handleChange(s);
+    setTimeout(() => {
+      nextQuestion();
+    }, 500);
     setValue(s);
   };
   const options = question.answers;
 
-  const { getRootProps , getRadioProps } = useRadioGroup({
-    name,
-    defaultValue: "",
-    onChange: inputChanged,
-  });
-
-  const group = getRootProps();
-
   useEffect(() => {
-    setValue(currValue)
-  },[currValue,index])
-  
+    setValue(currValue);
+  }, [currValue, index]);
 
   return (
     <Flex flex={1} flexDirection="column">
       <Flex flex={1} flexDirection="row">
-        <Text variant="questionNo">Q{index + 1})</Text>
-        <Flex direction="column">
+        <Flex
+          direction="column"
+          alignItems="center"
+          justifyContent="space-evenly"
+        >
           <Text variant="question">{question.text}</Text>
-          <HStack >
-            {options.map((v,i) => {
+          <Flex
+            align="center"
+            justify={["center", "space-between", "flex-end", "flex-end"]}
+            direction={["column", "row", "row", "row"]}
+            pt={[4, 4, 0, 0]}
+          >
+            {options.map((v, i) => {
               return (
-                <RadioCard handleChange={handleChange} isChecked={currValue === v} key={i} >
+                <RadioCard
+                  handleChange={inputChanged}
+                  isChecked={currValue === v}
+                  key={i}
+                >
                   {v}
                 </RadioCard>
               );
             })}
-          </HStack>
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

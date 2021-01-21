@@ -12,6 +12,7 @@ export default function Layout(props:Props) {
       align="center"
       maxW={{ xl: "1200px" }}
       m="0 auto"
+      minH="100vh"
     >
       <Header />
       {props.children}

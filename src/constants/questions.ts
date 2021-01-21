@@ -6,22 +6,22 @@ export interface QuestionType {
 const questions: Array<QuestionType> = [
   {
     text:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam laboriosam iste suscipit ut dolor, laborum corporis ad sit quis porro nulla inventore nobis vel assumenda quo! Blanditiis tempora voluptatum quo.?",
+      "This a the first question adipisicing elit. Quibusdam laboriosam iste suscipit ut dolor, laborum corporis ad sit quis porro nulla inventore nobis vel assumenda quo! Blanditiis tempora voluptatum quo.?",
     answers: ["one", "two", "three", "four"],
   },
   {
     text:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam laboriosam iste suscipit ut dolor, laborum corporis ad sit quis porro nulla inventore nobis vel assumenda quo! Blanditiis tempora voluptatum quo.?",
-    answers: ["one", "two", "three", "four"],
+      "This is the second question heya adipisicing elit. Quibusdam laboriosam iste suscipit ut dolor, laborum corporis ad sit quis porro nulla inventore nobis vel assumenda quo! Blanditiis tempora voluptatum quo.?",
+    answers: ["tree ", "two", "onetwo", "four"],
   },
   {
     text:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam laboriosam iste suscipit ut dolor, laborum corporis ad sit quis porro nulla inventore nobis vel assumenda quo! Blanditiis tempora voluptatum quo.?",
-    answers: ["one", "two", "three", "four"],
+      "This is the third Question adipisicing elit. Quibusdam laboriosam iste suscipit ut dolor, laborum corporis ad sit quis porro nulla inventore nobis vel assumenda quo! Blanditiis tempora voluptatum quo.?",
+    answers: ["one", "heya", "three", "four"],
   },
   {
     text:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam laboriosam iste suscipit ut dolor, laborum corporis ad sit quis porro nulla inventore nobis vel assumenda quo! Blanditiis tempora voluptatum quo.?",
+      "This is the fourth Question consectetur adipisicing elit. Quibusdam laboriosam iste suscipit ut dolor, laborum corporis ad sit quis porro nulla inventore nobis vel assumenda quo! Blanditiis tempora voluptatum quo.?",
     answers: ["one", "two", "three", "four"],
   },
   {

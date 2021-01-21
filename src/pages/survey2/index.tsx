@@ -31,11 +31,12 @@ export default function Survey() {
           }, 2000);
         }}
         validate={(values) => {
-          console.log(values)
+          console.log(values);
         }}
       >
-        {({ handleChange, isSubmitting, submitForm,values }) => (
+        {({ handleChange, isSubmitting, submitForm, values }) => (
           <Flex
+            flex={0.8}
             padding={"10px"}
             flexDirection="column"
             alignItems="center"
@@ -46,39 +47,44 @@ export default function Survey() {
               isLast={currIndex == questions.length - 1}
               question={questions[currIndex]}
               handleChange={handleChange(`questions[${currIndex}]`)}
+              nextQuestion={nextQuestion}
               currValue={values.questions[currIndex]}
               name={`questions[${currIndex}]`}
             />
 
-            <Button
-              onClick={previousQuestion}
-              disabled={currIndex == 0}
-              variant="normal"
-              mt="20"
+            <Flex
+              align="center"
+              justify={["space-between", "flex-end", "flex-end"]}
+              direction={[ "row", "row", "row"]}
+              pt={[4, 4, 0, 0]}
             >
-              Previous
-            </Button>
+              <Button
+                onClick={previousQuestion}
+                disabled={currIndex == 0}
+                variant="prev"
+              >
+                Previous
+              </Button>
 
-            <Button
-              onClick={nextQuestion}
-              variant="primary"
-              mt="20"
-              hidden={currIndex == questions.length - 1}
-            >
-              Next
-            </Button>
+              <Button
+                onClick={nextQuestion}
+                variant="next"
+                hidden={currIndex == questions.length - 1}
+              >
+                Next
+              </Button>
 
-            <Button
-              isLoading={isSubmitting}
-              loadingText={"Submitting"}
-              type="submit"
-              variant="primary"
-              onClick={submitForm}
-              mt="20"
-              hidden={currIndex != questions.length - 1}
-            >
-              Submit
-            </Button>
+              <Button
+                isLoading={isSubmitting}
+                loadingText={"Submitting"}
+                type="submit"
+                variant="next"
+                onClick={submitForm}
+                hidden={currIndex != questions.length - 1}
+              >
+                Submit
+              </Button>
+            </Flex>
           </Flex>
         )}
       </Formik>

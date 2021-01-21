@@ -13,35 +13,37 @@ const breakpoints = createBreakpoints({
 const styles = {
   global: {
     body: {
-      fontFamily: `'Nunito', sans-serif`
+      fontFamily: `'Nunito', sans-serif`,
     },
-    a:{
+    a: {
       _hover: {
         textDecoration: "none",
-        pointer:"hand"
-      }
+        pointer: "hand",
+      },
     },
-    button:{
-      _focus:{
-        boxShadow:"none !important"
-      }
-    }
+    button: {
+      _focus: {
+        boxShadow: "none !important",
+      },
+    },
   },
 };
 
 const Text = {
-  variants:{
-    "questionNo" :{
+  variants: {
+    questionNo: {
       fontWeight: "600",
-      color:"black",
-      marginRight: "8px"
+      color: "black",
+      marginRight: "8px",
     },
-    "question":{
+    question: {
       fontWeight: "400",
-      color:"gray.700"
-    }
-  }
-}
+      color: "gray.700",
+      fontSize:"24px",
+      textAlign:"center"
+    },
+  },
+};
 const theme = extendTheme({
   colors: {
     black: "#2e364a",
@@ -67,9 +69,23 @@ const theme = extendTheme({
           color: "white",
           fontWeight: "400",
         },
+        prev: {
+          bg: "white",
+          color: "primary.900",
+          padding: "10px 30px",
+          boxShadow:"4px 2px 2px #FBF5F6",
+          margin:"auto 20px"
+        },
+        next: {
+          bg: "primary.900",
+          color: "white",
+          fontWeight: "400",
+          padding:"10px 30px",
+          margin:"auto 20px"
+        },
       },
     },
-    Text
+    Text,
   },
   styles,
 });
