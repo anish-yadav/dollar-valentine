@@ -1,5 +1,7 @@
 import getFirebase from "../firebase/fireabse";
+import db from "../firebase/db"
 
+const User = db.collection("User");
 const firebase = getFirebase();
 async function signIn(email: string, password: string) {
   return firebase
@@ -27,5 +29,29 @@ async function postUserToken(token: string) {
   });
   return response.json(); // parses JSON response into native JavaScript objects
 }
+interface User {
+  email: string;
+  contact: string;
+  genderLooking: string;
+  password: string;
+  name:string
+}
 
+export async function signUp({ name, email, password, contact, genderLooking }: User) {
+  return firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(async ({user}) => {
+      if(!user) return null;
+      const userId = await user.getIdToken()
+      await User.doc(userId).set({
+        contact,
+        genderLooking,
+        name
+      })
+      return await postUserToken(userId);
+    }).catch(() => {
+      return null;
+    });
+}
 export default signIn;

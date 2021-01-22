@@ -1,24 +1,34 @@
 import { Formik } from "formik";
-import { Input, Flex, Text, Button } from "@chakra-ui/react";
+import { Input, Flex, Text, Button, Box } from "@chakra-ui/react";
 import { validateEmail } from "../../utils/validate";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
 interface Props {
   handleChange: (s: string) => void;
-  hidden: boolean
+  hidden: boolean;
 }
 
 const EmailInput = ({ handleChange, hidden }: Props) => {
+  const [showPassInp, setPassInp] = useState<boolean>(false);
+  const [showEmailInp, setEmailInp] = useState<boolean>(true);
+
+  useEffect(() => {
+
+
+  },[showEmailInp, showPassInp])
   return (
     <Formik
-      initialValues={{ email: "" }}
+      initialValues={{ email: "", password: "" }}
       onSubmit={(values, { setSubmitting, setErrors }) => {
         setTimeout(() => {
           console.log("Submitting");
-          console.log(values)
+          console.log(values);
           const error = validateEmail(values.email);
-            console.log("errors", error)
+          console.log("errors", error);
           if (error) {
             setErrors({ email: "Enter a valid email address" });
+            setEmailInp(true);
+            setPassInp(false);
           } else {
             handleChange(values.email);
           }
@@ -37,38 +47,67 @@ const EmailInput = ({ handleChange, hidden }: Props) => {
           p={[4, 8]}
           flexDirection={"column"}
           borderRadius={8}
-          justifyContent={"flex-start"}
+          justifyContent={"space-between"}
         >
-          <Text variant="hero">Love is in Air</Text>
-          <Text variant="bodyWhite" mt={4}>
-            This is the subheader section where you describe the basic benefits
-            of your product This is the subheader section where you describe the
-            basic benefits of your pro This is the subheader section where you
-            describe the basic benefits of your pro
-          </Text>
-          <Input
-            mt={10}
-            variant="flushed"
-            onChange={handleChange("email")}
-            value={values.email}
-            placeholder="email@mail.com"
-            color="white"
-            _placeholder={{
-              color: "gray.200",
-            }}
-            focusBorderColor="white"
-            isInvalid={errors && errors.email ? true : false}
-            errorBorderColor={"red"}
-          />
-          <Button
-            variant="submit"
-            isLoading={isSubmitting}
-            loadingText={"Cheking email"}
-            rightIcon={<ArrowForwardIcon />}
-            onClick={() => handleSubmit()}
-          >
-            Proceed to Next
-          </Button>
+          <Box>
+            <Text variant="hero">Love is in Air</Text>
+            <Text variant="bodyWhite" mt={4}>
+              This is the subheader section where you describe the basic
+              benefits of your product This is the subheader section where you
+              describe the basic benefits of your pro This is the subheader
+              section where you describe the basic benefits of your pro
+            </Text>
+          </Box>
+          <Box>
+            <Input
+              mt={10}
+              variant="flushed"
+              onChange={handleChange("email")}
+              value={values.email}
+              placeholder="email@mail.com"
+              color="white"
+              _placeholder={{
+                color: "gray.200",
+              }}
+              focusBorderColor="white"
+              isInvalid={errors && errors.email ? true : false}
+              errorBorderColor={"red"}
+              hidden={!showEmailInp}
+            />
+            <Input
+              mt={10}
+              variant="flushed"
+              onChange={handleChange("password")}
+              value={values.password}
+              placeholder="password"
+              color="white"
+              _placeholder={{
+                color: "gray.200",
+              }}
+              focusBorderColor="white"
+              isInvalid={errors && errors.email ? true : false}
+              errorBorderColor={"red"}
+              hidden={!showPassInp}
+            />
+            <Button
+              variant="submit"
+              background="primary.200"
+              color="black"
+              isLoading={isSubmitting}
+              loadingText={"Cheking email"}
+              rightIcon={<ArrowForwardIcon />}
+              onClick={() =>{
+                if(showPassInp && values.password.length > 5) {
+                  handleSubmit()
+                }else{
+                  setEmailInp(false);
+                  setPassInp(true);
+                }
+              }}
+            >
+              Proceed to Next
+            </Button>
+          </Box>
         </Flex>
       )}
     </Formik>
