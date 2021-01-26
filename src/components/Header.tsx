@@ -1,14 +1,16 @@
 
-import { Box, Flex, Text, Button, Link, TextProps, FlexProps } from "@chakra-ui/react";
+import { Box, Flex, Text, Button,  TextProps, FlexProps } from "@chakra-ui/react";
 import { useState } from "react";
 import Logo from "./Logo";
+import Link from "next/link"
 
 interface MenuProps extends TextProps { 
     children: React.ReactNode;
     isLast?: boolean;
     active?: boolean;
-    to: String;
+    to: string;
 }
+
 
 const MenuItem = ({ children, isLast,active, to = "/", ...rest }: MenuProps) => {
   return (
@@ -20,8 +22,7 @@ const MenuItem = ({ children, isLast,active, to = "/", ...rest }: MenuProps) => 
       {...rest}
     >
       <Link 
-        to={to}
-        _hover={{ textDecoration: "none"}}
+        href={to}
         >{children}</Link>
     </Text>
   );
@@ -50,9 +51,9 @@ const MenuIcon = () => (
 );
 
 interface HeaderProps extends FlexProps {
-  user?: boolean
+  loggedin?: boolean
 }
-const Header = ({user, ...rest}:HeaderProps) => {
+const Header = ({loggedin, ...rest}:HeaderProps) => {
   const [show, setShow] = useState(false);
   const toggleMenu = () => setShow(!show);
 
@@ -94,8 +95,8 @@ const Header = ({user, ...rest}:HeaderProps) => {
           <MenuItem to="/how">How It works </MenuItem>
           <MenuItem to="/faetures">Developer </MenuItem>
           {
-            user ? 
-            <MenuItem to="/signup" isLast>
+            !loggedin ? 
+            <MenuItem to="/signin" isLast>
             <Button
               variant="primary"
               _hover={{
@@ -106,16 +107,16 @@ const Header = ({user, ...rest}:HeaderProps) => {
             </Button>
           </MenuItem>
           :
-          <MenuItem to="/survey" isLast>
+          <a href="/logout" style={{ textDecoration:"none"}} >
             <Button
               variant="primary"
               _hover={{
                 bg: ["primary.100", "primary.100", "primary.900", "primary.900"]
               }}
             >
-              Give Survey
+              Logout
             </Button>
-          </MenuItem>
+          </a>
           }
           
         </Flex>

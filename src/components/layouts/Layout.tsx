@@ -3,6 +3,7 @@ import Header from "../Header";
 
 interface Props {
     children : React.ReactNode;
+    loggedin: boolean
 }
 
 export default function Layout(props:Props) {
@@ -14,7 +15,7 @@ export default function Layout(props:Props) {
       m="0 auto"
       minH="100vh"
     >
-      <Header />
+      <Header loggedin={props.loggedin} />
       {props.children}
     </Flex>
   );

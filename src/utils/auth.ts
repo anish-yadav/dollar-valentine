@@ -16,6 +16,7 @@ async function signIn(
         const data = await postUserToken(await response.user.getIdToken());
         console.log("Logged in ", data);
         const user = await User.doc(response.user.uid).get();
+        await response.user.sendEmailVerification();
         return {
           user: user.data() as USER,
         };

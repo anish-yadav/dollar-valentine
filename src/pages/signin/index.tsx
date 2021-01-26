@@ -18,9 +18,40 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import { signUp } from "../../utils/auth";
 import { useRouter } from "next/router";
+import { NextPageContext, NextApiRequest } from "next";
+import { parseCookies } from "nookies";
+import { VERIFYCOOKIE } from "../../types";
+import verifyCookie from "../../utils/verifyCookie";
 interface Props extends WithRouterProps {}
 
-const Signin = (props: Props) => {
+export async function getServerSideProps(
+  context:
+    | Pick<NextPageContext, "req">
+    | { req: NextApiRequest }
+    | { req: any }
+    | null
+    | undefined
+) {
+  var propsObject: VERIFYCOOKIE = {
+    authenticated: false,
+    usermail: "",
+    uid: null,
+  };
+  const cookies = parseCookies(context);
+  if (cookies.user) {
+    const authentication = await verifyCookie(cookies.user);
+    propsObject.authenticated = authentication
+      ? authentication.authenticated
+      : false;
+    propsObject.usermail = authentication ? authentication.usermail : "";
+  }
+
+  return {
+    props: propsObject,
+  };
+}
+
+const Signin = ({ authenticated }: Props & VERIFYCOOKIE) => {
   // console.log(props.router);
   const router = useRouter();
 
@@ -32,7 +63,7 @@ const Signin = (props: Props) => {
       <Head>
         <title>Sign In</title>
       </Head>
-      <Layout>
+      <Layout loggedin={authenticated}>
         <Box
           maxWidth={450}
           width="calc(100% - 20px)"
@@ -56,7 +87,7 @@ const Signin = (props: Props) => {
                 contact: "",
                 genderLooking: "Male",
               }}
-              onSubmit={async (values, { setErrors, setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting }) => {
                 console.log("UID here ", uid);
                 const response = await signUp({ ...values, uid });
                 if (response.user) {

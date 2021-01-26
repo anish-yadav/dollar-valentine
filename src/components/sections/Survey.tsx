@@ -18,7 +18,7 @@ export default function Survey() {
   };
 
   return (
-    <Layout>
+    <Layout loggedin={true}>
       <Head>
         <title>Survey2</title>
       </Head>
