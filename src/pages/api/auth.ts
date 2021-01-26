@@ -5,7 +5,7 @@ import getFirebaseAdmin from '../../firebase/admin';
 export default async function auth(req:any, res:any) {
   const admin = getFirebaseAdmin();
   
-    const expiresIn = 5 * 60 * 1000;
+    const expiresIn = 60 * 60 * 24 * 5 * 1000;
     if (req.method === 'POST') {
       var idToken = req.body.token;
 

@@ -1,6 +1,7 @@
 export interface VERIFYCOOKIE {
   authenticated: boolean;
   usermail: string | undefined;
+  uid: string | null
 }
 export interface USER {
   email?: string;

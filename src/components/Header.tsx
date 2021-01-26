@@ -49,7 +49,10 @@ const MenuIcon = () => (
   </svg>
 );
 
-const Header = (props:FlexProps) => {
+interface HeaderProps extends FlexProps {
+  user?: boolean
+}
+const Header = ({user, ...rest}:HeaderProps) => {
   const [show, setShow] = useState(false);
   const toggleMenu = () => setShow(!show);
 
@@ -64,7 +67,7 @@ const Header = (props:FlexProps) => {
       padding="20px 10px"
       bg={"transparent"}
       color={["white", "white", "primary.700", "primary.700"]}
-      {...props}
+      {...rest}
     >
       <Flex align="center">
         <Logo
@@ -90,7 +93,9 @@ const Header = (props:FlexProps) => {
           <MenuItem to="/" active={true}>Home</MenuItem>
           <MenuItem to="/how">How It works </MenuItem>
           <MenuItem to="/faetures">Developer </MenuItem>
-          <MenuItem to="/signup" isLast>
+          {
+            user ? 
+            <MenuItem to="/signup" isLast>
             <Button
               variant="primary"
               _hover={{
@@ -100,6 +105,19 @@ const Header = (props:FlexProps) => {
               Sign Up
             </Button>
           </MenuItem>
+          :
+          <MenuItem to="/survey" isLast>
+            <Button
+              variant="primary"
+              _hover={{
+                bg: ["primary.100", "primary.100", "primary.900", "primary.900"]
+              }}
+            >
+              Give Survey
+            </Button>
+          </MenuItem>
+          }
+          
         </Flex>
       </Box>
     </Flex>

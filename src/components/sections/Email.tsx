@@ -4,14 +4,20 @@ import { validateEmail } from "../../utils/validate";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import signIn, { signUpWithEP } from "../../utils/auth";
+import {useRouter} from "next/router"
+
 interface Props {
   handleChange: (uid:string) => void;
   hidden: boolean;
 }
 
 const EmailInput = ({ handleChange, hidden }: Props) => {
+
+  const router = useRouter();
   const [showPassInp, setPassInp] = useState<boolean>(false);
   const [showEmailInp, setEmailInp] = useState<boolean>(true);
+
+  
 
   useEffect(() => {}, [showEmailInp, showPassInp]);
 
@@ -39,7 +45,8 @@ const EmailInput = ({ handleChange, hidden }: Props) => {
               }
               //handleChange(values.email, values.password);
           } else {
-            console.log(signin_response);
+            console.log(router.query.redirect)
+            router.push( {pathname :"/survey" })
           }
         }
         setSubmitting(false);
