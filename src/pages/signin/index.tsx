@@ -15,21 +15,28 @@ import { RadioCard } from "../../components/custom/MyRadio";
 import Layout from "../../components/layouts/Layout";
 import EmailInput from "../../components/sections/Email";
 import { useEffect, useState } from "react";
+import Head from "next/head";
+import { signUp } from "../../utils/auth";
 
 interface Props extends WithRouterProps {}
 
 const Signin = (props: Props) => {
   // console.log(props.router);
 
-  const [email, setEmail] = useState<string>("");
+  const [uid, setUid] = useState<string>("");
+
 
   useEffect(() => {
-    console.log(email)
-  },[email])
+   console.log("UID in form",uid); 
+  },[uid])
   return (
+    <>
+    <Head>
+      <title>Sign In</title>
+    </Head>
     <Layout>
-      <Box maxWidth={450} shadow="xl" rounded={5} pos="relative">
-        <EmailInput hidden={email != ""} handleChange={setEmail} />
+      <Box maxWidth={450} width="calc(100% - 20px)" overflow="hidden" shadow="xl" rounded={5} pos="relative">
+        <EmailInput hidden={uid != ""} handleChange={setUid} />
         <Box p={[4, 8]}>
           <Text variant="header" mb={2}>
             Tell us about you
@@ -41,17 +48,18 @@ const Signin = (props: Props) => {
           <Formik
             initialValues={{
               name: "",
-              email: email,
               contact: "",
-              password: "",
-              gender: "Male",
+              genderLooking: "Male",
             }}
-            onSubmit={(values, { setErrors, setSubmitting }) => {
-              setTimeout(() => {
-                setErrors({ name: "Enter a valid name" });
-                console.log(values);
+            onSubmit={async (values, { setErrors, setSubmitting }) => {
+              
+              console.log("UID here ",uid)
+                const response = await signUp({ ...values, uid});
+                if(response.user) {
+                
+                }
                 setSubmitting(false);
-              }, 5000);
+              
             }}
           >
             {({ handleSubmit, handleChange, values, isSubmitting, errors }) => {
@@ -60,16 +68,16 @@ const Signin = (props: Props) => {
                   <Text variant="label">You are looking for</Text>
                   <Flex flexDirection="row">
                     <RadioCard
-                      isChecked={values.gender === "Male"}
-                      handleChange={handleChange("gender")}
+                      isChecked={values.genderLooking === "Male"}
+                      handleChange={handleChange("genderLooking")}
                       shadow="none"
                       borderColor="gray.200"
                     >
                       Male
                     </RadioCard>
                     <RadioCard
-                      isChecked={values.gender === "Female"}
-                      handleChange={handleChange("gender")}
+                      isChecked={values.genderLooking === "Female"}
+                      handleChange={handleChange("genderLooking")}
                       shadow="none"
                       borderColor="gray.200"
                     >
@@ -135,6 +143,7 @@ const Signin = (props: Props) => {
         </Box>
       </Box>
     </Layout>
+    </>
   );
 };
 

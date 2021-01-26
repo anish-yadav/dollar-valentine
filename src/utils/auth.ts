@@ -1,17 +1,31 @@
 import getFirebase from "../firebase/fireabse";
-import db from "../firebase/db"
+import db from "../firebase/db";
+import { SIGIN_RESPONSE, USER } from "../types";
 
 const User = db.collection("User");
 const firebase = getFirebase();
-async function signIn(email: string, password: string) {
+async function signIn(
+  email: string,
+  password: string
+): Promise<SIGIN_RESPONSE> {
   return firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(async (response) => {
       if (response && response.user) {
-        return await postUserToken(await response.user.getIdToken());
+        const data = await postUserToken(await response.user.getIdToken());
+        console.log("Logged in ", data);
+        const user = await User.doc(response.user.uid).get();
+        return {
+          user: user.data() as USER,
+        };
       }
-      return null;
+      return {
+        error: { code: "auth/unknown", message: "Unknown error occured" },
+      };
+    })
+    .catch((error) => {
+      return { error };
     });
 }
 
@@ -29,29 +43,55 @@ async function postUserToken(token: string) {
   });
   return response.json(); // parses JSON response into native JavaScript objects
 }
-interface User {
-  email: string;
-  contact: string;
+
+interface PersonalDetails {
+  name:string;
+  contact:string;
   genderLooking: string;
-  password: string;
-  name:string
+  uid:string
 }
 
-export async function signUp({ name, email, password, contact, genderLooking }: User) {
+export async function signUp({
+  name,
+  contact,
+  genderLooking,
+  uid
+}:PersonalDetails  ): Promise<SIGIN_RESPONSE> {
+  console.log("UID IN ",uid,name)
+    const res = await User.doc(uid).set({
+      name,
+      contact,
+      genderLooking,
+      uid
+    })
+    console.log("after setting res = ",res);
+    return {
+      user: {
+        name,
+        contact,
+        genderLooking,
+        uid
+      }
+    }
+}
+
+export async function signUpWithEP(
+  email: string,
+  password: string
+): Promise<{ uid?: string; error?: string }> {
   return firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(async ({user}) => {
-      if(!user) return null;
-      const userId = await user.getIdToken()
-      await User.doc(userId).set({
-        contact,
-        genderLooking,
-        name
-      })
-      return await postUserToken(userId);
-    }).catch(() => {
-      return null;
+    .then(async ({ user }) => {
+      if(!user) return { error : "Unknown error" }
+      await postUserToken(await user.getIdToken());
+      return {
+        uid: user.uid,
+      };
+    })
+    .catch((error) => {
+      console.log(error.toString())
+      return { error };
     });
 }
 export default signIn;

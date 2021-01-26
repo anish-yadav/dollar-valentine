@@ -3,8 +3,9 @@ import { Input, Flex, Text, Button, Box } from "@chakra-ui/react";
 import { validateEmail } from "../../utils/validate";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
+import signIn, { signUpWithEP } from "../../utils/auth";
 interface Props {
-  handleChange: (s: string) => void;
+  handleChange: (uid:string) => void;
   hidden: boolean;
 }
 
@@ -12,28 +13,36 @@ const EmailInput = ({ handleChange, hidden }: Props) => {
   const [showPassInp, setPassInp] = useState<boolean>(false);
   const [showEmailInp, setEmailInp] = useState<boolean>(true);
 
-  useEffect(() => {
+  useEffect(() => {}, [showEmailInp, showPassInp]);
 
-
-  },[showEmailInp, showPassInp])
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
-      onSubmit={(values, { setSubmitting, setErrors }) => {
-        setTimeout(() => {
-          console.log("Submitting");
-          console.log(values);
-          const error = validateEmail(values.email);
-          console.log("errors", error);
-          if (error) {
-            setErrors({ email: "Enter a valid email address" });
-            setEmailInp(true);
-            setPassInp(false);
+      onSubmit={async (values, { setSubmitting, setErrors }) => {
+        const error = validateEmail(values.email);
+        console.log("errors", error);
+        if (error) {
+          setErrors({ email: "Enter a valid email address" });
+          setEmailInp(true);
+          setPassInp(false);
+        } else {
+          // if i am able to login at this point then its ok otherwise continue;
+          const signin_response = await signIn(values.email, values.password);
+          if (signin_response.error) {
+            if (signin_response.error.code === "auth/user-not-found")
+              var { uid } = await signUpWithEP(values.email, values.password);
+              console.log("UID IS",uid)
+              if(!uid) {
+                alert("Internal server error please try again later");
+              }else {
+                handleChange(uid);
+              }
+              //handleChange(values.email, values.password);
           } else {
-            handleChange(values.email);
+            console.log(signin_response);
           }
-          setSubmitting(false);
-        }, 1000);
+        }
+        setSubmitting(false);
       }}
     >
       {({ values, handleChange, handleSubmit, errors, isSubmitting }) => (
@@ -96,10 +105,10 @@ const EmailInput = ({ handleChange, hidden }: Props) => {
               isLoading={isSubmitting}
               loadingText={"Cheking email"}
               rightIcon={<ArrowForwardIcon />}
-              onClick={() =>{
-                if(showPassInp && values.password.length > 5) {
-                  handleSubmit()
-                }else{
+              onClick={() => {
+                if (showPassInp && values.password.length > 5) {
+                  handleSubmit();
+                } else {
                   setEmailInp(false);
                   setPassInp(true);
                 }
