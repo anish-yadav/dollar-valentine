@@ -15,6 +15,21 @@ const styles = {
     body: {
       fontFamily: `'Nunito', sans-serif`,
     },
+    '*' : {
+      scrollbarWidth: "thin",
+      scrollbarColor: "primary.900 primary.100"
+    },
+    "*::-webkit-scrollbar":{
+      width:"10px"
+    },
+    "*::-webkit-scrollbar-track":{
+      background:"primary.100",
+    },
+    "*::-webkit-scrollbar-thumb":{
+      backgroundColor:"primary.900",
+      borderRadius:"20px",
+      border: "3px solid primary.100"
+    },
     a: {
       _hover: {
         textDecoration: "none",
