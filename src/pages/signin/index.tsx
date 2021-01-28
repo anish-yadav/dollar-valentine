@@ -71,6 +71,7 @@ const Signin = ({ authenticated }: Props & VERIFYCOOKIE) => {
           shadow="xl"
           rounded={5}
           pos="relative"
+          marginBottom={10}
         >
           <EmailInput hidden={uid != ""} handleChange={setUid} />
           <Box p={[4, 8]}>

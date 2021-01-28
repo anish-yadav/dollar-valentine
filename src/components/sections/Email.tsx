@@ -1,23 +1,20 @@
 import { Formik } from "formik";
-import { Input, Flex, Text, Button, Box } from "@chakra-ui/react";
+import { Input, Flex, Text, Button, Box, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { validateEmail } from "../../utils/validate";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon, CloseIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import signIn, { signUpWithEP } from "../../utils/auth";
-import {useRouter} from "next/router"
+import { useRouter } from "next/router";
 
 interface Props {
-  handleChange: (uid:string) => void;
+  handleChange: (uid: string) => void;
   hidden: boolean;
 }
 
 const EmailInput = ({ handleChange, hidden }: Props) => {
-
   const router = useRouter();
   const [showPassInp, setPassInp] = useState<boolean>(false);
   const [showEmailInp, setEmailInp] = useState<boolean>(true);
-
-  
 
   useEffect(() => {}, [showEmailInp, showPassInp]);
 
@@ -33,20 +30,29 @@ const EmailInput = ({ handleChange, hidden }: Props) => {
           setPassInp(false);
         } else {
           // if i am able to login at this point then its ok otherwise continue;
-          const signin_response = await signIn(values.email, values.password);
-          if (signin_response.error) {
-            if (signin_response.error.code === "auth/user-not-found")
-              var { uid } = await signUpWithEP(values.email, values.password);
-              console.log("UID IS",uid)
-              if(!uid) {
-                alert("Internal server error please try again later");
-              }else {
-                handleChange(uid);
-              }
-              //handleChange(values.email, values.password);
+          const {error, user} = await signIn(values.email, values.password);
+          if (error) {
+            var uid = user?.uid;
+            console.log(error)
+            if (error.code === "auth/user-not-found"){
+              var { uid : suid } = await signUpWithEP(values.email, values.password);
+              uid = suid;
+            }else if(error.code === "auth/wrong-password"){
+              console.log("here")
+              setErrors({password : "Wrong Password"});
+              setEmailInp(false);
+              setPassInp(true);
+              setSubmitting(false);
+              return;
+            }
+            if (!uid) {
+              alert("Internal server error please try again later");
+            } else {
+              handleChange(uid);
+            }
+            //handleChange(values.email, values.password);
           } else {
-            console.log(router.query.redirect)
-            router.push( {pathname :"/survey" })
+            router.push({ pathname: "/survey" });
           }
         }
         setSubmitting(false);
@@ -75,6 +81,7 @@ const EmailInput = ({ handleChange, hidden }: Props) => {
             </Text>
           </Box>
           <Box>
+            <InputGroup>
             <Input
               mt={10}
               variant="flushed"
@@ -90,6 +97,9 @@ const EmailInput = ({ handleChange, hidden }: Props) => {
               errorBorderColor={"red"}
               hidden={!showEmailInp}
             />
+            <InputRightElement top={"auto"} bottom={0} children={errors && errors.email ? <CloseIcon color="white" /> : ""} />
+            </InputGroup>
+            <InputGroup>
             <Input
               mt={10}
               variant="flushed"
@@ -101,10 +111,12 @@ const EmailInput = ({ handleChange, hidden }: Props) => {
                 color: "gray.200",
               }}
               focusBorderColor="white"
-              isInvalid={errors && errors.email ? true : false}
+              isInvalid={errors && errors.password ? true : false}
               errorBorderColor={"red"}
               hidden={!showPassInp}
             />
+            <InputRightElement top={"auto"} bottom={0} children={errors && errors.password ? <CloseIcon color="white" /> : ""} />
+            </InputGroup>
             <Button
               variant="submit"
               background="primary.200"

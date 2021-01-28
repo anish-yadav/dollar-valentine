@@ -13,10 +13,10 @@ async function signIn(
     .signInWithEmailAndPassword(email, password)
     .then(async (response) => {
       if (response && response.user) {
-        const data = await postUserToken(await response.user.getIdToken());
-        console.log("Logged in ", data);
+        await postUserToken(await response.user.getIdToken());
         const user = await User.doc(response.user.uid).get();
-        await response.user.sendEmailVerification();
+        if(!response.user.emailVerified)
+          await response.user.sendEmailVerification();
         return {
           user: user.data() as USER,
         };
@@ -84,6 +84,7 @@ export async function signUpWithEP(
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(async ({ user }) => {
+      console.log(user)
       if(!user) return { error : "Unknown error" }
       await postUserToken(await user.getIdToken());
       return {
@@ -91,7 +92,7 @@ export async function signUpWithEP(
       };
     })
     .catch((error) => {
-      console.log(error.toString())
+      console.log("Error is ",error)
       return { error };
     });
 }
