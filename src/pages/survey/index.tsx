@@ -7,6 +7,7 @@ import Survey from "../../components/sections/Survey";
 import { NextPageContext, NextApiRequest } from "next";
 import { VERIFYCOOKIE } from "../../types";
 import { useEffect } from "react";
+import Loading from "../../components/custom/Loading";
 
 export async function getServerSideProps(
   context:
@@ -49,7 +50,7 @@ export default function SuveryWrapper(props: VERIFYCOOKIE) {
     <div>
       {props.authenticated
         ? <Survey />
-        : "You are a guest"}
+        : <Loading />}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { Button, Flex } from "@chakra-ui/react";
 import { Formik } from "formik";
+import Head from "next/head";
 import { useState } from "react";
 import Layout from "../../components/layouts/Layout";
 import { Question2 } from "../../components/sections/Question";
@@ -18,6 +19,9 @@ export default function Survey() {
 
   return (
     <Layout loggedin={true}>
+      <Head>
+        <title>Survey</title>
+      </Head>
       <Formik
         initialValues={{ questions: [] }}
         onSubmit={(values, { setSubmitting }) => {

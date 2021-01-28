@@ -1,6 +1,8 @@
 import { NextApiRequest, NextPageContext } from "next";
-import {  destroyCookie, parseCookies } from "nookies";
+import { useRouter } from "next/router";
+import { destroyCookie } from "nookies";
 import { useEffect } from "react";
+import Loading from "../../components/custom/Loading";
 import { VERIFYCOOKIE } from "../../types";
 
 export async function getServerSideProps(
@@ -23,11 +25,14 @@ export async function getServerSideProps(
   };
 }
 
-export default function Logout(props:VERIFYCOOKIE  ) {
+export default function Logout() {
+  const router = useRouter();
     useEffect(() => {
-         
+      router.push({
+        pathname: "/"
+      })
     },[])
     return (
-        <p>Logging out.....</p>
+       <Loading /> 
     )
 }
