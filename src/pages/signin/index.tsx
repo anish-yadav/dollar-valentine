@@ -22,6 +22,7 @@ import { NextPageContext, NextApiRequest } from "next";
 import { parseCookies } from "nookies";
 import { VERIFYCOOKIE } from "../../types";
 import verifyCookie from "../../utils/verifyCookie";
+import { validContact } from "../../utils/validate";
 interface Props extends WithRouterProps {}
 
 export async function getServerSideProps(
@@ -88,7 +89,19 @@ const Signin = ({ authenticated }: Props & VERIFYCOOKIE) => {
                 contact: "",
                 genderLooking: "Male",
               }}
-              onSubmit={async (values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting, setErrors }) => {
+                if (values.name.length <= 0) {
+                  setErrors({ name: "Name cannot be empty" });
+                  setSubmitting(false);
+                  return;
+                } else if (
+                  values.contact.length > 0 &&
+                  !validContact(values.contact)
+                ) {
+                  setErrors({ contact: "Enter correct contact number" });
+                  setSubmitting(false);
+                  return;
+                }
                 console.log("UID here ", uid);
                 const response = await signUp({ ...values, uid });
                 if (response.user) {
